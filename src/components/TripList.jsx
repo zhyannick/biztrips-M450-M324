@@ -1,24 +1,27 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import {testTrips} from "./api";
 
 
 // functional component ProductList, deconstruct props!
 function TripList({ addToWishlist }) {
   const [month, setMonth] = useState("");
-  const [trips, setTrips] = useState([]);
+  const [trips, setTrips] = useState(testTrips);
   const months = ["Idle", "Jan", "Feb", "March", "April", "Mai", "June"];
 
+
+
   // fetch trips from server
-  useEffect(() => {
+ /* useEffect(() => {
     // get the trips from the server
     //getTrips().then((data) => setTrips(data));
     // get the trips from the server with fetch
-    fetch("http://localhost:3001/trips")
+    fetch("http://localhost:8080/v1/trips")
         .then((response) => response.json())
         .then((data) => setTrips(data))
         .catch((err) => console.error(err));
 
-  }, []);
+  }, []);*/
 
   const tripsMapped = trips.map((trip, index) => (
     <Trip addToWishlist={addToWishlist} trip={trip} key={trip.id} />
