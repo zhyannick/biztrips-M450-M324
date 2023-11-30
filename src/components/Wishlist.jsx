@@ -1,11 +1,13 @@
-import React from "react";
+import React, {} from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 // deconstruct props
 export default function Wishlist({ wishlist, removeFromWishlist, clearWishlist }) {
+
   // as constant variant 2
   const itemsMapped = wishlist.map((item, index) => (
+
     <WishlistItem
-      deleteItem={removeFromWishlist}
+      removeFromWishlist={removeFromWishlist}
       item={item}
       key={index}
     />
@@ -15,14 +17,15 @@ export default function Wishlist({ wishlist, removeFromWishlist, clearWishlist }
     <tr>
       <td colSpan="4">
         {" "}
-        <p className="alert alert-info">Cart is empty</p>
+        <p className="alert alert-info">Wishlist is empty</p>
       </td>
     </tr>
   );
 
   return (
     <div className="container">
-      <React.Fragment>
+      <>
+        <h2 className="h4">Wishlist</h2>
         <div className="row">
           <div className="col-sm-12">
             <div className="card table-responsive">
@@ -30,9 +33,7 @@ export default function Wishlist({ wishlist, removeFromWishlist, clearWishlist }
                 <thead className="text-muted">
                   <tr>
                     <th scope="col">Trip</th>
-                    <th scope="col" width="200">
-                      Quantity
-                    </th>
+
                     <th scope="col" width="120">
                       Price
                     </th>
@@ -44,16 +45,11 @@ export default function Wishlist({ wishlist, removeFromWishlist, clearWishlist }
                 <tbody>{itemsMapped.length > 0 ? itemsMapped : empty}</tbody>
                 <tfoot>
                   <tr>
-                    <th align="right" scope="col">
-                      <p className="alert alert-success">
-                        Add USD 5.00 of eligible items to your order to qualify
-                        for FREE Shipping.{" "}
-                      </p>
-                    </th>
+
                     <th scope="col">
                       <dl className="dlist-align">
-                        <dt>Total price: </dt>
-                        <dt>USD </dt>
+                        <dt>Total </dt>
+
                       </dl>
                     </th>
                     <th scope="col" />
@@ -76,37 +72,40 @@ export default function Wishlist({ wishlist, removeFromWishlist, clearWishlist }
             </div>
           </div>
         </div>
-      </React.Fragment>
+      </>
     </div>
   );
 }
 
 function WishlistItem(props) {
   // deconstruct props
-  const { updateQuantity, deleteItem } = props;
+  const { removeFromWishlist, item } = props;
   // props
-  let { id, title, description, startdate, enddate } = props.item;
+  let { id, title, description, startTrip, endTrip } = item;
 
+
+  // console.log("WishlistItem", item);
   return (
     <tr key={id}>
       <td>
         <figure className="media">
+
           <div className="img-wrap">
             <img
               className="img-thumbnail img-xs"
-              src={"images/items/" + id + ".jpg"}
+              src={"/images/items/" + id + ".jpg"}
               alt="img"
             />
           </div>
           <figcaption className="media-body">
             <h6 className="h6">{title}</h6>
             <dl className="dlist-inline small">
-              <dt>Size: </dt>
-              <dd>XXL</dd>
+              <dt>{title}</dt>
+              <dd>{description}</dd>
             </dl>
             <dl className="dlist-inline small">
-              <dt>Color: </dt>
-              <dd>Orange color</dd>
+              <dt>{startTrip.toLocaleString()}</dt>
+              <dd>{endTrip.toLocaleString()}</dd>
             </dl>
           </figcaption>
         </figure>
@@ -117,7 +116,10 @@ function WishlistItem(props) {
         <i className="fa-regular fa-heart"></i>
         <button
           className="btn btn-outline-danger"
-          onClick={() => deleteItem(props.item)} // App deleteItem
+          // onClick={ () => removeFromWishlist(props.item) } // App deleteItem
+
+
+            onClick={() => removeFromWishlist(item)}
         >
           delete Item
         </button>

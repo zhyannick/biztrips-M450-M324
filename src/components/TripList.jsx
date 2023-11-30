@@ -1,12 +1,24 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { getProducts } from "../services/cartService.js";
+
 
 // functional component ProductList, deconstruct props!
-function TripList({ trips, addToWishlist }) {
+function TripList({ addToWishlist }) {
+  const [month, setMonth] = useState("");
+  const [trips, setTrips] = useState([]);
+  const months = ["Idle", "Jan", "Feb", "March", "April", "Mai", "June"];
 
+  // fetch trips from server
+  useEffect(() => {
+    // get the trips from the server
+    //getTrips().then((data) => setTrips(data));
+    // get the trips from the server with fetch
+    fetch("http://localhost:3001/trips")
+        .then((response) => response.json())
+        .then((data) => setTrips(data))
+        .catch((err) => console.error(err));
 
-
+  }, []);
 
   const tripsMapped = trips.map((trip, index) => (
     <Trip addToWishlist={addToWishlist} trip={trip} key={trip.id} />
@@ -18,12 +30,43 @@ function TripList({ trips, addToWishlist }) {
     </section>
   );
 
+  // if month selected then filter the trips from month === month
+  const filteredTrips = month
+      ? trips.filter((t) => t.startTrip[1] === parseInt(month))
+      : tripsMapped;
+
   return (
     <div className="container">
       <section>
-        <h4 className="h4">Trip List</h4>
+        <h2 className="h4">Triplist-Catalog</h2>
+         <section id="filters">
+            <label htmlFor="month">Filter by Month:</label>
+            <select
+              id="month"
+              value={month} // controlled component
+              onChange={(e) => {
+                //debugger;
+                setMonth(e.target.value);
+              }}
+            >
+              <option value="">All Months</option>
+              <option value="1">January</option>
+              <option value="2">February</option>
+              <option value="3">March</option>
+              <option value="4">April</option>
+              <option value="5">Mai</option>
+              <option value="6">June</option>
+            </select>
+            {month && (
+              <h2>
+                Found {filteredTrips.length}
+                {filteredTrips.length >= 1 ? " trips" : " trip"} for the month of
+                {" " + months[month]}
+              </h2>
+            )}
+          </section>
         <div className="row">
-          {tripsMapped.length > 0 ? tripsMapped : empty}
+          {filteredTrips.length > 0 ? tripsMapped : empty}
         </div>
       </section>
     </div>
@@ -32,27 +75,29 @@ function TripList({ trips, addToWishlist }) {
 // deconstruct ...props
 function Trip({ addToWishlist, ...props }) {
   // Props
-  let { id, title, description, startdate, enddate } = props;
+  let {trip} = props;
+  let { id, title, description, startTrip, endTrip } = trip;
 
   return (
     <div className="col-sm-6 col-md-4 col-lg-3">
       <figure className="card card-product">
+
         <div className="img-wrap">
-          <img src={"images/items/" + id + ".jpg"} alt="name " />
+          <img src={"images/items/" + trip.id + ".jpg"} alt="name " />
         </div>
         <figcaption className="info-wrap">
-          <a href="#. . . " className="title">
-            {title}
-          </a>
+          <h6 className="title">
+              {id}  {title} {trip.startTrip} {trip.endTrip}
+          </h6>
 
           <p className="card-text">{description}</p>
           <div className="info-wrap row">
             <button
               type="button"
               className="btn btn-link btn-outline"
-              onClick={() => addToWishlist(props.trip)}
+              onClick={() => addToWishlist(trip)}
             >
-              <i className="fa fa-shopping-cart" /> Add to Cart
+              <i className="fa fa-shopping-cart" /> Add to Wishlist
             </button>
           </div>
         </figcaption>
