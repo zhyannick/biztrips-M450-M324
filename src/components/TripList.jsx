@@ -76,7 +76,7 @@ function TripList({ addToWishlist }) {
 function Trip({ addToWishlist, ...props }) {
   // Props
   let {trip} = props;
-  let { id, title, description, startTrip, endTrip } = trip;
+  let { id, title, description, } = trip;
 
   return (
     <div className="col-sm-6 col-md-4 col-lg-3">

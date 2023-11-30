@@ -30,6 +30,11 @@
       "react-app/jest"
     ]
   },
+  "devDependencies": {
+    "eslint-plugin-react": "^7.26.1",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "@babel/plugin-proposal-private-property-in-object": "^7.16.7"
+  },
   "browserslist": {
     "production": [
       ">0.2%",
