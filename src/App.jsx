@@ -1,69 +1,52 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import "./App.css";
-//import "bootstrap/dist/css/bootstrap.min.css";
+
 import Footer from "./Footer";
 import Header from "./Header";
-//import Spinner from "./Spinner";
+import TripList from "./components/TripList";
+import Wishlist from "./components/Wishlist";
+
 
 export default function App() {
+
   const [month, setMonth] = useState("");
-
-  const trips = [
-    {
-      id: 1,
-      title: "BT01",
-      description: "San Francisco World Trade Center on new Server/IOT/Client002",
-      startTrip: [2021, 2, 13, 0, 0],
-      endTrip: [2021, 2, 15, 16, 56],
-      meetings: [
-        {
-          id: 1,
-          title: "One Conference",
-          description: "Key Note on One Conference",
-        },
-        {
-          id: 2,
-          title: "Zero Conference",
-          description: "Workshop Zero on One Conference",
-        },
-      ],
-    },
-    {
-      id: 2,
-      title: "BT02",
-      description: "Santa Clara Halley on new Server/IOT/Client",
-      startTrip: [2021, 6, 23, 9, 0],
-      endTrip: [2021, 6, 27, 16, 56],
-      meetings: [
-        {
-          id: 3,
-          title: "One Conference",
-          description: "HandsOn on One Conference",
-        },
-        {
-          id: 4,
-          title: "One Conference",
-          description: "Key Note on One Conference",
-        },
-      ],
-    },
-    {
-      id: 3,
-      title: "BT03",
-      description: "San Cose City Halley on Docker/IOT/Client",
-      startTrip: [2021, 12, 13, 9, 0],
-      endTrip: [2021, 12, 15, 16, 56],
-      meetings: [
-        {
-          id: 5,
-          title: "One Conference",
-          description: "Key Note on One Conference",
-        },
-      ],
-    },
-  ];
-
+  const [trips, setTrips] = useState([]);
   const months = ["Idle", "Jan", "Feb", "March", "April", "Mai", "June"];
+  const [wishlist, setWishlist] = useState([]); // [1,2,3,4,5
+
+    // fetch trips from server
+  useEffect(() => {
+    // get the trips from the server
+    //getTrips().then((data) => setTrips(data));
+    // get the trips from the server with fetch
+    fetch("http://localhost:3001/trips")
+        .then((response) => response.json())
+        .then((data) => setTrips(data))
+        .catch((err) => console.error(err));
+
+  }, []);
+
+
+  // wishlist functions
+    function addToWishlist(id,title,description,startTrip,endTrip) {
+        setWishlist( (trip) => {
+          const tripInWishlist = trip.find((t) => t.id === id);
+          if (tripInWishlist) {
+            return trip;
+          } else {
+            return [...trip, { id, title, description, startTrip, endTrip }];
+          }
+        } );
+    }
+
+    function removeFromWishlist(id) {
+        setWishlist((trip) => trip.filter((t) => t.id !== id));
+    }
+
+    function clearWishlist() {
+        setWishlist([]);
+    }
+
 
   function renderTrip(t) {
     return (
@@ -81,8 +64,8 @@ export default function App() {
             </div>
             <p>{t.description}</p>
             <div>
-              <button type="button" disabled>
-                Add to Triplist
+              <button type="button" >
+                Add to Wishlist
               </button>
             </div>
           </figcaption>
@@ -104,6 +87,10 @@ export default function App() {
         <Header />
         <main>
           <h1>Welcome to biztrips 2023</h1>
+
+
+
+         {/*<Wishlist wishlist={wishlist} removeFromWishlist={removeFromWishlist()} clearWishlist={clearWishlist()}/>*/}
           <section id="filters">
             <label htmlFor="month">Filter by Month:</label>
             <select
@@ -130,6 +117,7 @@ export default function App() {
               </h2>
             )}
           </section>
+          {/*<TripList trips={filteredTrips} addToWishlist={addToWishlist} />*/}
           <section id="products">{filteredTrips.map(renderTrip)}</section>
         </main>
       </div>
