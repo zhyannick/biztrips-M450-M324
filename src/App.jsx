@@ -47,7 +47,7 @@ export default function App() {
       <div>
         <Header />
         <main>
-          <h1>Welcome to biztrips 2023</h1>
+          <h1>Welcome to biztrips 2024</h1>
 
          <Wishlist wishlist={wishlist} removeFromWishlist={()=>removeFromWishlist()} clearWishlist={()=>clearWishlist()} />
          {/*   <WishList />*/}

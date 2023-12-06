@@ -52,6 +52,21 @@
           "description": "Key Note on One Conference"
         }
       ]
+    },
+
+    {
+      "id": 3,
+      "title": "BT04",
+      "description": "San Mateo City Halley on Docker/IOT/Client",
+      "startTrip": [2023, 12, 13, 9, 0],
+      "endTrip": [2023, 12, 15, 16, 56],
+      "meetings": [
+        {
+          "id": 6,
+          "title": "One Conference",
+          "description": "Key Note on One Conference"
+        }
+      ]
     }
   ]
 }
