@@ -54,10 +54,10 @@ export default function Wishlist({ wishlist, removeFromWishlist, clearWishlist }
                     </th>
                     <th scope="col" />
                     <th scope="col">
-                      <button
+                     { <button
                         //onClick={heartItem}
                         className="btn btn-outline-success fa fa-heart fa-xs"
-                      />
+                      />}
                       <button
                         className="btn btn-outline-danger"
                         onClick={clearWishlist}
@@ -83,6 +83,7 @@ function WishlistItem(props) {
   // props
   let { id, title, description, startTrip, endTrip } = item;
 
+  console.log("WishlistItem", props);
 
   // console.log("WishlistItem", item);
   return (
@@ -119,7 +120,7 @@ function WishlistItem(props) {
           // onClick={ () => removeFromWishlist(props.item) } // App deleteItem
 
 
-            onClick={() => removeFromWishlist(item)}
+            onClick={(item) => removeFromWishlist(item)}
         >
           delete Item
         </button>
