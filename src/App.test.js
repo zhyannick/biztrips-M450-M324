@@ -2,9 +2,11 @@ import {logRoles, render, screen} from "@testing-library/react";
 import App from "./App";
 //import useFetch from "./services/useFetch";
 //import {getBusinessTrips} from "./services/tripsService";
-/*it("ret without crashing", () => {
+/*
+it("ret without crashing", () => {
   shallow(<App />);
-});*/
+});
+*/
 
 /*it("renders Account header", () => {
   const wrapper = shallow(<App />);
@@ -12,14 +14,14 @@ import App from "./App";
   expect(wrapper.contains(welcome)).toEqual(true);
 });*/
 
-/*test('App renders a heading', () => {
+test('App renders a heading', () => {
   render(<App />)
 
   screen.getByRole('heading', {
-    name: "Welcome to biztrips 2024 - Juhui",
+    name: "Welcome to biztrips Happy new Year - 2024",
   })
 
-});*/
+});
 
 /*describe("SearchForm", () => {
   test("renders SearchForm", () => {
