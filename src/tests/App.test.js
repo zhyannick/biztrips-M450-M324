@@ -1,5 +1,5 @@
 import {logRoles, render, screen} from "@testing-library/react";
-import App from "./App";
+import App from "../App";
 //import useFetch from "./services/useFetch";
 //import {getBusinessTrips} from "./services/tripsService";
 /*
