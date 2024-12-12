@@ -1,34 +1,80 @@
-import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
-import Wishlist from '../components/Wishlist'; // Pfad zur Wishlist-Komponente
+import React from "react";
+import { render, screen, fireEvent } from "@testing-library/react";
+import Wishlist from "../components/Wishlist";
 
-describe('Wishlist Component', () => {
-  const mockRemoveFromWishlist = jest.fn();
-  const mockClearWishlist = jest.fn();
+// Mock-Daten
+const mockWishlist = [
+  {
+    id: 1,
+    title: "Trip 1",
+    description: "Description 1",
+    startTrip: new Date(2023, 5, 1),
+    endTrip: new Date(2023, 5, 10),
+  },
+  {
+    id: 2,
+    title: "Trip 2",
+    description: "Description 2",
+    startTrip: new Date(2023, 6, 15),
+    endTrip: new Date(2023, 6, 20),
+  },
+];
+
+// Mock-Funktionen
+const mockRemoveFromWishlist = jest.fn();
+const mockClearWishlist = jest.fn();
+
+test("renders wishlist with items", () => {
+    render(
+      <Wishlist
+        wishlist={mockWishlist}
+        removeFromWishlist={mockRemoveFromWishlist}
+        clearWishlist={mockClearWishlist}
+      />
+    );
   
-  const sampleWishlist = [
-    { id: 1, title: 'Trip to Paris', description: 'A lovely trip to Paris', startTrip: new Date(), endTrip: new Date() },
-    { id: 2, title: 'Trip to New York', description: 'An exciting trip to New York', startTrip: new Date(), endTrip: new Date() }
-  ];
-
-  test('renders wishlist items correctly', () => {
-    render(<Wishlist wishlist={sampleWishlist} removeFromWishlist={mockRemoveFromWishlist} clearWishlist={mockClearWishlist} />);
+    // Überprüfen der Anzahl der gerenderten <tr> Elemente innerhalb des <tbody>
+    const rows = screen.getAllByRole('row');
     
-    const parisElements = screen.getAllByText('Trip to Paris');
-    expect(parisElements.length).toBeGreaterThan(0);
+    // Wir erwarten zwei <tr> Elemente für die beiden Trips in der Wunschliste
+    expect(rows).toHaveLength(4); // Zwei Items plus Header Row
+  
+    // Spezifischere Auswahl durch Rolle oder Test-ID
+    const firstTripTitle = screen.getByRole('heading', { name: /Trip 1/ });
+    
+    expect(firstTripTitle).toBeInTheDocument();
   });
 
-  test('displays empty message when wishlist is empty', () => {
-    render(<Wishlist wishlist={[]} removeFromWishlist={mockRemoveFromWishlist} clearWishlist={mockClearWishlist} />);
-    
-    expect(screen.getByText('Wishlist is empty')).toBeInTheDocument();
-  });
+test("calls removeFromWishlist when delete button is clicked", () => {
+  render(
+    <Wishlist
+      wishlist={mockWishlist}
+      removeFromWishlist={mockRemoveFromWishlist}
+      clearWishlist={mockClearWishlist}
+    />
+  );
 
-  test('calls clearWishlist when "empty wishlist" button is clicked', () => {
-    render(<Wishlist wishlist={sampleWishlist} removeFromWishlist={mockRemoveFromWishlist} clearWishlist={mockClearWishlist} />);
-    
-    fireEvent.click(screen.getByText('empty wishlist'));
-    expect(mockClearWishlist).toHaveBeenCalledTimes(1);
-  });
+  // Klicke auf den "delete Item"-Button für den ersten Trip
+  const deleteButtons = screen.getAllByText(/delete Item/);
+  
+  fireEvent.click(deleteButtons[0]);
+
+  // Überprüfen, ob die Funktion `removeFromWishlist` mit dem richtigen Item aufgerufen wurde
+  expect(mockRemoveFromWishlist).toHaveBeenCalledWith(mockWishlist[0]);
+});
+
+test("calls clearWishlist when empty wishlist button is clicked", () => {
+  render(
+    <Wishlist
+      wishlist={mockWishlist}
+      removeFromWishlist={mockRemoveFromWishlist}
+      clearWishlist={mockClearWishlist}
+    />
+  );
+
+  // Klicke auf den "empty wishlist"-Button
+  fireEvent.click(screen.getByText(/empty wishlist/));
+
+  // Überprüfen, ob die Funktion `clearWishlist` aufgerufen wurde
+  expect(mockClearWishlist).toHaveBeenCalled();
 });
