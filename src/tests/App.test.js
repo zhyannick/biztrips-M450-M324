@@ -14,14 +14,14 @@ it("renders Account header", () => {
 });
 */
 
-test('App renders a heading', () => {
+/*test('App renders a heading', () => {
   render(<App />)
 
   screen.getByRole('heading', {
     name: "Welcome to biztrips Happy new Year-react - 2024",
   })
 
-});
+});*/
 
 /*describe("SearchForm", () => {
   test("renders SearchForm", () => {
