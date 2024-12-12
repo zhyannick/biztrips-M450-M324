@@ -11,11 +11,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build the Docker image
-        run: docker build -t yannickzh/biztrips-M450-M324 .
+        run: docker build -t yannickzh/biztrips-m450-m324 .
       - name: Log in to Docker Hub
         run: docker login -u yannickzh -p  ${{ secrets.DOCKER_ACCESS_TOKEN }}
       - name: Push the Docker image
-        run: docker push yannickzh/biztrips-M450-M324
+        run: docker push yannickzh/biztrips-m450-m324
 
   deploy:
     needs: build
@@ -28,11 +28,11 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Pull the Docker image
-        run: docker pull yannickzh/biztrips-M450-M324-testing:latest
+        run: docker pull yannickzh/biztrips-m450-m324-testing:latest
 
       - name: Extract app files from the container
         run: |
-          container_id=$(docker create yannickzh/biztrips-M450-M324-testing:latest)
+          container_id=$(docker create yannickzh/biztrips-m450-m324-testing:latest)
           mkdir -p ./app/build
           docker cp $container_id:/app/build ./app/
           docker rm $container_id
