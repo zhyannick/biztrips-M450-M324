@@ -13,7 +13,7 @@ jobs:
       - name: Build the Docker image
         run: docker build -t yannickzh/biztrips-m450-m324 .
       - name: Log in to Docker Hub
-        run: docker login -u yannickzh -p  ${{ secrets.DOCKER_ACCESS_TOKEN }}
+        run: docker login -u yannickzh -p ${{ secrets.DOCKER_ACCESS_TOKEN }}
       - name: Push the Docker image
         run: docker push yannickzh/biztrips-m450-m324
 
