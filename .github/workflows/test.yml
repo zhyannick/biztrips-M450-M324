@@ -2,21 +2,35 @@ on:
   push:
     branches: [ main ]
 
-
 name: Testing
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      # Checke den Code aus dem Repository aus
       - uses: actions/checkout@v4
-      - name: Set up node
+
+      # Setze Node.js auf
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
+
+      # Installiere Abhängigkeiten
       - name: Install dependencies
-        run: |
-          npm install
-      - name: Run tests
-        run: |
-          npm run test
+        run: npm install
+
+      # Starte die Anwendung (falls erforderlich)
+      - name: Start application
+        run: npm start &
+        env:
+          CI: true
+
+      # Warte auf die Anwendung, bis sie läuft (optional)
+      - name: Wait for application to be ready
+        run: npx wait-on http://localhost:3000
+
+      # Führe Cypress-Tests im Headless-Modus aus
+      - name: Run Cypress tests
+        run: npx cypress run
