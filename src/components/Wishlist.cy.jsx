@@ -2,7 +2,7 @@ import React from 'react'
 import Wishlist from './Wishlist'
 
 
-describe('Wishlist Component', () => {
+describe('Wishlist Unit Tests', () => {
   let mockRemoveFromWishlist;
   let mockClearWishlist;
 
@@ -76,14 +76,38 @@ describe('Wishlist Component', () => {
       });
     });
   });
+});
+
+describe('Wishlist Integration Tests', () => {
+  let mockClearWishlist;
+  let mockRemoveFromWishlist;
+
+  beforeEach(() => {
+    // Stubs für jede Testausführung erstellen
+    mockClearWishlist = cy.stub();
+    mockRemoveFromWishlist = cy.stub();
+
+    cy.mount(
+      <Wishlist
+        wishlist={[
+          { id: 1, title: 'Trip to Paris', description: 'A lovely trip', startTrip: new Date(), endTrip: new Date() },
+          { id: 2, title: 'Trip to Rome', description: 'An amazing adventure', startTrip: new Date(), endTrip: new Date() },
+        ]}
+        removeFromWishlist={mockRemoveFromWishlist}
+        clearWishlist={mockClearWishlist}
+      />
+    );
+  });
 
   it('clears the wishlist when the "empty wishlist" button is clicked', () => {
-    // Klicke auf den "empty wishlist"-Button im `tfoot`
+    // Wähle den "empty wishlist"-Button im `tfoot`
     cy.get('tfoot .btn.btn-outline-danger.float-right').click();
   
     // Überprüfe, ob `clearWishlist` aufgerufen wurde
     cy.wrap(mockClearWishlist).should('have.been.calledOnce');
   });
+  
+
   it('disables the "empty wishlist" button when the wishlist is empty', () => {
     // Mount die Komponente mit einer leeren Wunschliste
     cy.mount(
@@ -98,3 +122,7 @@ describe('Wishlist Component', () => {
     cy.get('.btn.btn-outline-danger.float-right').should('be.disabled');
   });
 });
+
+
+
+
