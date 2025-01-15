@@ -1,4 +1,4 @@
-name: CI
+name: CI Pipeline
 
 on:
   push:
@@ -10,16 +10,46 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      
       - name: Build the Docker image
         run: docker build -t yannickzh/biztrips-m450-m324 .
+
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" | docker login -u yannickzh --password-stdin
+
       - name: Push the Docker image
         run: docker push yannickzh/biztrips-m450-m324
 
-  deploy:
+  test:
     needs: build
     runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Start application
+        run: npm start &
+        env:
+          CI: true
+
+      - name: Wait for application to be ready
+        run: npx wait-on http://localhost:3000
+
+      - name: Run Cypress tests
+        run: npx cypress run
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

@@ -71,8 +71,6 @@ test('filters trips by selected month using real API data', () => {
   expect(screen.getByText(/BT02/)).toBeInTheDocument();
 });
 
-// E2E Tests
-
 test('filters trips by selected month and adds to wishlist', () => {
   render(<TripList addToWishlist={mockAddToWishlist} />);
 
